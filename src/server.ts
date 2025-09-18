@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import config from "./config";
+import v1 from "./routes/v1";
 
 export const createServer = () => {
   const app = express();
@@ -17,5 +18,6 @@ export const createServer = () => {
     res.json({ ok: true, env: config.env });
   });
 
+  app.use("/v1", v1);
   return app;
 };
