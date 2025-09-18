@@ -1,6 +1,7 @@
 import { createServer } from "./server";
-const server = createServer();
+import config from "./config";
 
-server.listen(3003, () => {
-  console.log("Server is running on port 3003");
+const server = createServer();
+server.listen(config.port, () => {
+  console.log(`Server is running on port ${config.port}`);
 });
