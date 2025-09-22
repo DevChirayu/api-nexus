@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import EntityNotFoundError from "../../../errors/EntitiyNotFoundError";
+import prisma from "../../../prisma-client";
 
-export const listTasks = (req: Request, res: Response) => {
-  res.status(200).json({ message: "List of tasks" });
+export const listTasks = async (req: Request, res: Response) => {
+  const task = await prisma.task.findMany();
+  res.status(200).json({ task });
 };
 
 export const getTask = async (
@@ -10,12 +12,16 @@ export const getTask = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.params.id !== "1") {
+  const task = await prisma.task.findUnique({
+    where: { id: req.params.id },
+  });
+
+  if (!task) {
     throw new EntityNotFoundError({
       message: "Task not found",
       statusCode: 404,
       code: "ERR_NF",
     });
   }
-  res.status(200).json({ id: 1, name: "Sample Task 1" });
+  res.status(200).json({ task });
 };
